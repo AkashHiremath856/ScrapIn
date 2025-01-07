@@ -1,0 +1,14 @@
+bs4
+pandas 
+openpyxl
+webdriver-manager
+selenium_stealth
+undetected_chromedriver
+setuptools
+libsql-experimental
+clerk_backend_api
+quart-cors
+uvicorn
+quart
+redis
+quart_session

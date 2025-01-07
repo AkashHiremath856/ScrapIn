@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebScrapIn: Admin</title>
+
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+{% include "navbar.html" %}
+
+<body class="bg-gradient-to-b from-gray-800 via-gray-700 to-gray-800 text-gray-100">
+
+    {% include "insights.html" %}
+
+    
+</body>
+
+{% include "admin_profiles.html" %}
+
+<script>  
+    document.addEventListener("DOMContentLoaded", function () {
+    // Attach event listeners to all download buttons
+    const downloadCsvButtons = document.querySelectorAll(".downloadCsvButton");
+    downloadCsvButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const memberName = this.getAttribute("data-member-name");
+            window.location.href = '/download/' + encodeURIComponent(memberName);
+        });
+    });
+
+    // Attach event listeners to all transfer buttons
+    const transferDataButtons = document.querySelectorAll(".transferDataButton");
+    transferDataButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const memberName = this.getAttribute("data-member-name");
+            fetch('/transfer/' + encodeURIComponent(memberName))
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Transfer failed");
+                    }
+                })
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Transfer failed. Please try again.');
+                });
+            });
+        });
+    });
+                
+    </script>
+  
+</html>

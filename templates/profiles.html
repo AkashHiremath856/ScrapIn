@@ -1,0 +1,146 @@
+<div class="user-info-container m-2 bg-gray-100 text-gray-800 rounded-lg shadow-md h-[80vh] mx-auto overflow-hidden w-full sm:w-full md:w-full lg:w-5/6 xl:w-5/6" id="userInfoContainer" style="width: 95%;">
+  {% if user_data['data'] is not none %}
+    <!-- Filter Icon Button -->
+    <div class="flex justify-end mb-4 pr-4 relative">
+        <button id="filterBtn" class="text-blue-500 hover:text-blue-600 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L14 12.414V19a1 1 0 01-.447.832l-4 2.667A1 1 0 019 21v-8.586L3.293 6.707A1 1 0 013 6V4z"></path>
+        </svg>
+        </button>
+        {% include "filters.html" %}
+    </div>
+
+    <div class="h-full">
+      <button id="automateButton" class="fixed bottom-4 right-4 bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+        </svg>
+      </button>
+      
+      <table class="user-info-table w-full table-auto text-sm text-left">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="px-4 py-2 text-left font-medium">Select</th>
+            <th class="px-4 py-2 text-left font-medium">Profile Picture</th>
+            <th class="px-4 py-2 text-left font-medium">Name</th>
+            <th class="px-4 py-2 text-left font-medium">Location</th>
+            <th class="px-4 py-2 text-left font-medium">Date</th>
+            <th class="px-4 py-2 text-left font-medium">Company</th>
+            <th class="px-4 py-2 text-left font-medium">Department</th>
+            <th class="px-4 py-2 text-left font-medium">Has Premium</th>
+            <th class="px-4 py-2 text-left font-medium">Connect Available</th>
+            <th class="px-4 py-2 text-left font-medium">Free Message</th>
+            <th class="px-4 py-2 text-left font-medium">Message Sent</th>
+            <th class="px-4 py-2 text-left font-medium">Profile URL</th>
+            <th class="px-4 py-2 text-left font-medium">Recent Activity</th>
+            <th class="px-4 py-2 text-left font-medium">Followers</th>
+            <th class="px-4 py-2 text-left font-medium">Connections</th>
+          </tr>
+          <!-- Filter Row -->
+          <tr class="bg-gray-200">
+            <td class="px-4 py-2 flex items-center space-x-2 bg-gray-100">
+              <label for="check_all" class="text-left text-gray-800 cursor-pointer">
+                Select all
+              </label>
+              <input type="checkbox" id="check_all" onclick="toggleAllCheckboxes(this)" class="h-5 w-5 text-blue-500 rounded focus:ring focus:ring-blue-300">
+            </td>
+            <td colspan="14" class="px-4 py-2 bg-gray-100">
+              <div class="flex justify-start items-center space-x-4">
+                <p class="text-sm text-gray-800">Counts: <span id="selected_count" class="text-gray-900">0</span>/{{ user_data['data']|length }}</p>
+              </div>
+            </td>
+          </tr>
+        </thead>
+        <tbody class="text-gray-800">
+          {% for user in user_data['data'] %}
+          <tr class="border-t border-gray-300 hover:bg-gray-100 transition duration-200">
+            <td class="px-4 py-2">
+              {% if user['Message_Sent'] == 'False' and user['Free_Message'] == 'True' %}
+              <input type="checkbox" class="user-checkbox" onclick="updateSelectedCount()" data-user-id="{{ user['Profile_URL'] }}" class="h-4 w-4 text-blue-500">
+              {% endif %}
+            </td>
+            <td class="px-4 py-2">
+              <img src="{{ user['Profile_Pic_URL'] if user['Profile_Pic_URL'].startswith('https://') else url_for('static', filename='user_pic.png') }}" alt="Profile Picture" class="w-12 h-12 rounded-full">
+            </td>
+            <td class="px-4 py-2">{{ user['Name'] }}</td>
+            <td class="px-4 py-2">{{ user['Location'] }}</td>
+            <td class="px-4 py-2">{{ user['Date'] }}</td>
+            <td class="px-4 py-2">{{ user['Company'] }}</td>
+            <td class="px-4 py-2">{{ user['Department'] }}</td>
+            <td class="px-4 py-2">{{ user['Has_Premium'] }}</td>
+            <td class="px-4 py-2">{{ user['Connect_Available'] }}</td>
+            <td class="px-4 py-2">{{ 'False' if user['Message_Sent'] == 'True' else user['Free_Message'] }}</td>
+            <td class="px-4 py-2">{{ user['Message_Sent'] }}</td>
+            <td class="px-4 py-2"><a href="{{ user['Profile_URL'] }}" class="text-blue-400" target="_blank">Link</a></td>
+            <td class="px-4 py-2">{{ user['Recent_Activity'] }}</td>
+            <td class="px-4 py-2">{{ user['Followers'] }}</td>
+            <td class="px-4 py-2">{{ "{} + {}".format(user['Connections'].split()[0], user['Connections'].split()[1]) }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    
+      <!-- Download Button -->
+      <div class="flex justify-end mr-4 p-4">
+        <button class="bg-blue-500 text-white py-2 px-6 rounded-lg font-semibold hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 downloadCsvButton" data-member-name="{{ user_data['user_data']['id'] }}">
+          Download Data
+        </button>
+      </div>
+    </div>
+
+
+    {% else %}
+    <!-- No Data Found -->
+    <div class="user-info-container m-2 rounded-lg shadow-md h-[50vh] mx-auto overflow-hidden w-full sm:w-full md:w-full lg:w-4/6 xl:w-5/6 flex items-center justify-center">
+      <img src="{{ url_for('static', filename='no_data_found.png') }}" alt="No data found" class="items-center">
+    </div>
+    {% endif %}
+  </div>
+
+<script>
+
+  //-----------------------_Download btn-------------------------
+  document.addEventListener("DOMContentLoaded", function () {
+    const downloadCsvButtons = document.querySelectorAll(".downloadCsvButton");
+    downloadCsvButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const memberName = this.getAttribute("data-member-name");
+            window.location.href = '/download/' + encodeURIComponent(memberName);
+        });
+    });
+  });
+
+  // ------------------------------------------------------Select all check button--------------------------------------------
+  function toggleAllCheckboxes(source) {
+    const checkboxes = document.querySelectorAll('.user-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = source.checked;
+    });
+    updateSelectedCount();
+  }
+
+  function updateSelectedCount() {
+      const checkboxes = document.querySelectorAll('.user-checkbox');
+      const selectedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+      document.getElementById('selected_count').textContent = selectedCount;
+  }
+
+// ------------------------------------------------------Toggle check button--------------------------------------------
+function updateSelectedCount() {
+    const checkboxes = document.querySelectorAll('.user-checkbox');
+    const selectedCount = Array.from(checkboxes).filter(checkbox => checkbox.checked).length;
+    document.getElementById('selected_count').textContent = selectedCount;
+
+    const automateButton = document.getElementById('automateButton');
+    if (selectedCount > 0) {
+        automateButton.style.display = 'inline-block';
+    } else {
+        automateButton.style.display = 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    updateSelectedCount();
+});
+
+</script>

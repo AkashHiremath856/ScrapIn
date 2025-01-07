@@ -1,0 +1,70 @@
+{% for member, datas in user_data['data'].items() %}
+<div class="user-info-container m-2 bg-gradient-to-b from-white via-gray-100 to-white rounded-lg shadow-md h-auto mx-auto overflow-hidden w-full sm:w-full md:w-full lg:w-5/6 xl:w-5/6">
+    <!-- Member Name and Buttons Section -->
+    <h1 id="memberName" class="text-2xl font-bold mb-4 text-gray-800">
+        {{ 'You' if user_data['user_data']['id'] == member else user_data['name'][member] }}
+    </h1>
+
+    {% if user_data['user_data']['id'] != member %}
+    <!-- Buttons Section -->
+    <div class="flex space-x-4 mb-4">
+        <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 downloadCsvButton" data-member-name="download_{{ member }}">
+            Download CSV
+        </button>
+        <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200 focus:outline-none focus:ring-2 focus:ring-green-400 transferDataButton" data-member-name="transfer_{{ member }}">
+            Transfer Data
+        </button>
+    </div>
+    {% endif %}
+
+    <!-- Member Data Table Section -->
+    <div class="overflow-y-auto max-h-80 border-t border-gray-300">
+        <table class="w-full table-auto text-sm text-left text-gray-800">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-2">Profile Picture</th>
+                    <th class="px-4 py-2">Name</th>
+                    <th class="px-4 py-2">Location</th>
+                    <th class="px-4 py-2">Date</th>
+                    <th class="px-4 py-2">Company</th>
+                    <th class="px-4 py-2">Department</th>
+                    <th class="px-4 py-2">Has Premium</th>
+                    <th class="px-4 py-2">Connect Available</th>
+                    <th class="px-4 py-2">Free Message</th>
+                    <th class="px-4 py-2">Message Sent</th>
+                    <th class="px-4 py-2">Profile URL</th>
+                    <th class="px-4 py-2">Recent Activity</th>
+                    <th class="px-4 py-2">Followers</th>
+                    <th class="px-4 py-2">Connections</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-800">
+                {% for user in datas %}
+                <tr class="border-t border-gray-300 hover:bg-gray-200 transition duration-200">
+                    <td class="px-4 py-2">
+                        <img src="{{ user[2] if user[2].startswith('https://') else url_for('static', filename='user_pic.png') }}" alt="Profile Picture" class="w-12 h-12 rounded-full">
+                    </td>
+                    <td class="px-4 py-2">{{ user[1] }}</td>
+                    <td class="px-4 py-2">{{ user[3] }}</td>
+                    <td class="px-4 py-2">{{ user[0] }}</td>
+                    <td class="px-4 py-2">{{ user[12] }}</td>
+                    <td class="px-4 py-2">{{ user[13] }}</td>
+                    <td class="px-4 py-2">{{ user[4] }}</td>
+                    <td class="px-4 py-2">{{ user[5] }}</td>
+                    <td class="px-4 py-2">{{ user[6] }}</td>
+                    <td class="px-4 py-2">{{ user[7] }}</td>
+                    <td class="px-4 py-2">
+                        <a href="{{ user[8] }}" target="_blank" class="text-blue-500 hover:underline">Link</a>
+                    </td>
+                    <td class="px-4 py-2">{{ user[9] }}</td>
+                    <td class="px-4 py-2">{{ user[10] }}</td>
+                    <td class="px-4 py-2">{{ "{} + {}".format(user[11].split()[0], user[11].split()[1]) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h3 class="text-right mt-4 text-lg font-semibold text-gray-600">Total rows: {{ datas|length }}</h3>
+</div>
+{% endfor %}

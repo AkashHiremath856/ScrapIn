@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebScrapIn: A LinkedIn Scrapper</title>
+
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+  <script src="{{ url_for('static', filename='popup.js') }}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gradient-to-b from-gray-800 via-gray-700 to-gray-800 text-gray-100">
+
+{% include "navbar.html" %}
+
+
+<!-- Message Modal -->
+<div id="messageDialog" class="fixed inset-0 bg-gray-900 flex justify-center items-center hidden z-50 transition-all duration-300 ease-in-out">
+  <div class="bg-white p-6 rounded-lg shadow-lg text-black w-96 transition-all duration-300 ease-in-out">
+    <h1 class="text-xl font-semibold mb-4">Write a message to be sent</h1>
+    <input type="text" id="subjectText" class="w-full p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 border border-gray-600 mb-4" placeholder="Enter subject" />
+    <textarea id="messageText" class="w-full h-60 p-3 rounded-lg bg-gray-700 text-white placeholder-gray-400 border border-gray-600 mb-4" placeholder="Type your message here..." rows="4"></textarea>
+    <div class="flex justify-between">
+      <button id="sendButton" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">Send</button>
+      <button id="cancelButton" class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400">Cancel</button>
+    </div>
+    <h2 class="text-sm mt-4 text-gray-400">
+      Note: Connect invite will be sent automatically in the next 3 days after the message is sent.
+    </h2>
+  </div>
+</div>
+
+
+<!-- Loading Modal -->
+<div id="loadingModal" class="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center hidden z-50">
+  <div class="bg-gray-900 p-6 rounded-lg shadow-lg text-center w-72">
+    <div class="flex justify-center items-center mb-4">
+      <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600"></div>
+    </div>
+    <p class="text-xl font-semibold text-gray-300">Please wait...</p>
+    <div id="logContainer" class="text-gray-300 mt-4 text-sm max-h-40 overflow-y-auto"></div>  <!-- Log container -->
+  </div>
+</div>
+
+
+{% include "form.html" %}
+  
+<!-- User Info Container -->
+{% include "profiles.html" %}
+
+
+</body>
+<script>
+
+//------------------- Content Switching Logic-----------
+
+const nav1 = document.getElementById("nav1");
+const nav2 = document.getElementById("nav2");
+const formSection = document.getElementById('form-section');
+const modalSection = document.getElementById('userInfoContainer');
+
+function setActiveButton(activeButton) {
+  document.querySelectorAll('.nav-item').forEach(button => {
+    button.classList.remove('bg-blue-500');
+    button.classList.add('bg-gray-700');
+  });
+
+  activeButton.classList.add('bg-blue-500');
+}
+
+nav1.addEventListener('click', () => {
+  formSection.classList.remove('hidden');
+  modalSection.classList.add('hidden');
+
+  setActiveButton(nav1);
+});
+
+nav2.addEventListener('click', () => {
+  modalSection.classList.remove('hidden');
+  formSection.classList.add('hidden');
+
+  setActiveButton(nav2);
+});
+
+
+//-----------------------Download btn--------------------------
+document.addEventListener("DOMContentLoaded", function () {
+    const downloadCsvButtons = document.querySelectorAll(".downloadCsvButton");
+    downloadCsvButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const memberName = this.getAttribute("data-member-name");
+            window.location.href = '/download/' + encodeURIComponent(memberName);
+        });
+    });
+  });
+
+
+// ---------------------------Modal required------------------
+function toggleMessageRequired() {
+  console.log("Checkbox clicked!");
+  var checkbox = document.getElementById('message');
+  var textarea = document.getElementById('message_note');
+
+  if (checkbox.checked) {
+      textarea.setAttribute('required', 'true');
+  } else {
+      textarea.removeAttribute('required');
+  }
+}
+
+</script>
+</html>

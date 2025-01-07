@@ -1,0 +1,23 @@
+{
+    "manifest_version": 3,
+    "name": "WebScrapIn for LinkedIn Web Scrapping and Automation",
+    "description": "WebScrapIn is a web app designed to scrape LinkedIn profiles and company information. The platform enables users to extract detailed data about LinkedIn members, filter results based on location, department, and other criteria, and interact with profiles based on their connection status.",
+    "version": "1.0",
+    "permissions": [
+        "cookies",
+        "tabs",
+        "storage",
+        "activeTab"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "host_permissions": [
+        "http://localhost:5000/*",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "action": {
+        "default_popup": ""
+    }
+}

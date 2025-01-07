@@ -1,0 +1,16 @@
+services:
+  webscrapin:
+    build:
+      context: . 
+      dockerfile: dockerfile 
+    environment:
+      - LOG_LEVEL=DEBUG
+    ports:
+      - "5000:5000"  # Flask app (Uvicorn)
+      - "80:80"      # HTTP
+      - "443:443"    # HTTPS
+    volumes:
+      - ./archives:/app/archives  # Archives
+      - ./logs:/app/.logs  # Logs
+    restart: unless-stopped
+    command: ["./start.sh"]  # Run start.sh script to launch Redis and Uvicorn

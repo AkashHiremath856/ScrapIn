@@ -1,0 +1,9 @@
+.logs/
+__pycache__/
+errors_logs.txt
+Sample_input.xlsx
+venv
+.wdm
+extension
+chrome_data
+archives

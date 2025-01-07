@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Logs
+.logs
+output_data.xlsx
+errors_logs.txt
+
+# Data
+chrome_data
+archives
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Environments
+venv
+py_venv

@@ -1,0 +1,85 @@
+<div class="bg-gray-800 text-white p-4 flex justify-between items-center shadow-md w-full">
+    <div class="text-2xl font-bold flex items-center">
+        <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Logo" class="w-8 h-8">
+        <span class="ml-2 text-2xl font-bold">WebScrapIn</span>
+    </div>
+
+    <!-- Navigation Tabs (Desktop and Mobile) -->
+    {% if show_nav_tabs %}
+    <div class="hidden lg:flex space-x-6">
+        <div id="nav1" class="nav-item cursor-pointer py-2 px-4 text-gray-300 hover:text-blue-400 transition duration-200 relative active">
+          <span class="flex items-center space-x-2">
+            <svg class="w-6 h-6 icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5zm2 0v10h12V5H4z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-sm font-medium">Fetch Profile</span>
+          </span>
+        </div>
+      
+        <div id="nav2" class="nav-item cursor-pointer py-2 px-4 text-gray-300 hover:text-blue-400 transition duration-200 relative">
+          <span class="flex items-center space-x-2">
+            <svg class="w-6 h-6 icon" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-14a6 6 0 110 12A6 6 0 0110 4z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-sm font-medium">View Profiles</span>
+          </span>
+        </div>
+    </div>
+    {% endif %}
+            
+    <!-- User Profile Dropdown (Always visible on Desktop) -->
+    <div class="relative hidden lg:block">
+        <button id="userButton" class="flex items-center space-x-2 focus:outline-none">
+            <img src="{{ url_for('static', filename='user_pic.png') }}" alt="User Logo" class="w-8 h-8 rounded-full border-2 border-white">
+            <span class="text-white font-medium">{{ user_data['user_data']['first_name'] }}</span>
+        </button>
+
+        <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg hidden z-10">
+            <div class="py-2 px-4 border-b">
+                <p class="font-semibold">{{ user_data['user_data']['first_name'] }} 
+                <span class="text-sm text-gray-500">({{ 'Admin' if user_data['user_data']['admin']=='true' else 'Member'}})</span>
+                </p>
+            </div>
+
+            {% if user_data['user_data']['admin']=='true' %}
+            <a href="/admin" class="block px-4 py-2 text-blue-600 hover:bg-gray-100 transition-colors duration-200">
+                Admin Panel
+            </a>
+            {% endif %}
+
+            <a href="/logout" class="block px-4 py-2 text-red-500 hover:bg-gray-100 transition-colors duration-200">
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+
+//----------------- Script to handle dropdown toggle -----------------
+
+const userButton = document.getElementById("userButton");
+const dropdownMenu = document.getElementById("dropdownMenu");
+
+userButton.addEventListener("click", function() {
+    dropdownMenu.classList.toggle("hidden");
+});
+
+// Close dropdown when clicking outside
+window.addEventListener("click", function(event) {
+    if (!userButton.contains(event.target)) {
+        dropdownMenu.classList.add("hidden");
+    }
+});
+
+//---------------------------- Handle logout--------------------
+document.getElementById("logout").addEventListener("click", function() {
+    window.location.href = "{{ url_for('logout') }}";
+    window.close()
+    setTimeout(function() {
+    window.close();
+}, 3000);
+});
+
+</script>
+

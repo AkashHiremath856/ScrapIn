@@ -1,0 +1,124 @@
+<!-- Filter Modal -->
+<div id="filterModal" class="hidden absolute top-full right-0 mt-2 bg-white rounded-lg shadow-lg w-64 h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] xl:h-[90vh] z-50">
+  <div class="p-4 space-y-4 max-h-80 overflow-y-auto">
+      <!-- Generic Filter Structure -->
+      {% for filter_key, filter_label in {
+        'Name': 'name-filter',
+        'Location': 'location-filter',
+        'Date': 'date-filter',
+        'Company': 'company-filter',
+        'Department': 'department-filter',
+        'Has_Premium': 'premium-filter',
+        'Connect_Available': 'connect-filter',
+        'Free_Message': 'freeMessage-filter',
+        'Message_Sent': 'messageSent-filter',
+        'Recent_Activity': 'recentActivity-filter'
+    }.items() %}
+    
+    <div>
+      <label class="block text-gray-800 mb-2">{{ filter_key }}</label>
+      <div class="border rounded-lg p-2 bg-gray-100 max-h-30 overflow-y-auto">
+        {% if user_data['unique_values'][filter_label] %}
+          {% for value in user_data['unique_values'][filter_label] %}
+          <div class="flex items-center space-x-2">
+            <input type="checkbox" class="{{ filter_label }}" value="{{ value }}" onchange="filterTable()">
+            <label class="text-gray-800">{{ value }}</label>
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="text-gray-400">No available values</div>
+        {% endif %}
+      </div>
+    </div>
+    
+    {% endfor %}
+            
+    </div>
+  </div>
+
+<script>
+
+//---------------------------Filter Modal------------------
+// Toggle visibility of the filter modal on button click
+document.getElementById('filterBtn').addEventListener('click', () => {
+    const filterModal = document.getElementById('filterModal');
+    
+    // Toggle the 'hidden' class based on the current visibility
+    filterModal.classList.toggle('hidden');
+});
+
+// --------------------------------Apply Filters-----------------------
+
+// Function to filter the table based on selected filters
+function filterTable() {
+    const table = document.querySelector(".user-info-table tbody");
+    const rows = table.getElementsByTagName("tr");
+
+    // Collect selected values for each filter
+    const filters = {};
+    document.querySelectorAll("input[type=checkbox]:checked").forEach(cb => {
+        const filterClass = cb.className.split(" ")[0];
+        if (!filters[filterClass]) {
+            filters[filterClass] = [];
+        }
+        filters[filterClass].push(cb.value.toLowerCase().trim());
+    });
+
+    // Loop through each row in the table
+    for (let row of rows) {
+        let displayRow = true;
+
+        // Check if the row matches all selected filters
+        for (const [filterClass, selectedValues] of Object.entries(filters)) {
+            const columnIndexes = getColumnIndexes(filterClass);
+            const cellValues = getRowCellValues(row);
+
+            let filterMatch = false;
+            columnIndexes.forEach(index => {
+                const cellValue = cellValues[index]?.toLowerCase().trim();
+                if (selectedValues.includes(cellValue)) {
+                    filterMatch = true;
+                }
+            });
+
+            if (!filterMatch) {
+                displayRow = false;
+                break;
+            }
+        }
+
+        // Show or hide the row based on the filter match
+        row.style.display = displayRow ? "" : "none";
+    }
+}
+
+
+// Helper function to map filter classes to column indexes
+function getColumnIndexes(filterClass) {
+    const columnMapping = {
+    "name-filter": [2],           // Name column index
+    "location-filter": [3],       // Location column index
+    "date-filter": [4],           // Date column index
+    "company-filter": [5],        // Company column index
+    "department-filter": [6],     // Department column index
+    "premium-filter": [7],        // Premium column index
+    "connect-filter": [8],        // Connect Available column index
+    "freeMessage-filter": [9],    // Free Message Available column index
+    "messageSent-filter": [10],   // Message Sent column index
+    "recentActivity-filter": [12] // Recent Activity column index (fix index)
+    };
+    return columnMapping[filterClass] || [];
+}
+
+// Helper function to extract cell values from a row based on indexes
+function getRowCellValues(row) {
+    const cells = row.getElementsByTagName("td");
+    const cellValues = [];
+    for (let i = 0; i < cells.length; i++) {
+        cellValues.push(cells[i]?.textContent?.trim());
+    }
+    return cellValues;
+}
+
+
+</script>

@@ -1,0 +1,79 @@
+<div class="container mx-auto p-4 bg-gradient-to-b from-white via-gray-100 to-white">
+    <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">{{ user_data['user_data']['org_name'] }}'s Dashboard</h1>
+
+    <!-- Metrics Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-6">
+        <div class="bg-indigo-600 text-white p-4 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
+            <h2 class="text-xl font-semibold text-center">Total Members</h2>
+            <p class="text-3xl mt-2 text-center">{{ user_data['members'] }}</p>
+        </div>
+        <div class="bg-teal-600 text-white p-4 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105">
+            <h2 class="text-xl font-semibold text-center">Profile Count</h2>
+            <p class="text-3xl mt-2 text-center">{{ user_data['data_count'] }}</p>
+        </div>
+    </div>
+
+    <!-- Chart Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto mb-6">
+        <div class="overflow-hidden rounded-lg shadow-lg bg-white">
+            <canvas id="regionChart" class="w-full h-40"></canvas>
+        </div>
+        <div class="overflow-hidden rounded-lg shadow-lg bg-white">
+            <canvas id="companyChart" class="w-full h-40"></canvas>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Extracting data from Flask template
+const regionLabels = {{ user_data['region_count'] | map(attribute=0) | list | tojson }};
+const regionData = {{ user_data['region_count'] | map(attribute=1) | list | tojson }};
+const companyLabels = {{ user_data['company_count'] | map(attribute=0) | list | tojson }};
+const companyData = {{ user_data['company_count'] | map(attribute=1) | list | tojson }};
+
+// Common chart options
+const commonOptions = {
+    responsive: true,
+    scales: {
+        y: {
+            beginAtZero: true
+        }
+    }
+};
+
+// Region Chart
+const regionCtx = document.getElementById('regionChart').getContext('2d');
+new Chart(regionCtx, {
+    type: 'bar',
+    data: {
+        labels: regionLabels,
+        datasets: [{
+            label: 'Region Data Count',
+            data: regionData,
+            backgroundColor: 'rgba(67, 56, 247, 0.5)', // Updated to match the login page
+            borderColor: 'rgba(67, 56, 247, 1)', // Updated to match the login page
+            borderWidth: 1
+        }]
+    },
+    options: commonOptions
+});
+
+// Company Chart
+const companyCtx = document.getElementById('companyChart').getContext('2d');
+new Chart(companyCtx, {
+    type: 'bar',
+    data: {
+        labels: companyLabels,
+        datasets: [{
+            label: 'Company Data Count',
+            data: companyData,
+            backgroundColor: 'rgba(20, 184, 166, 0.5)', // Updated to match the login page
+            borderColor: 'rgba(20, 184, 166, 1)', // Updated to match the login page
+            borderWidth: 1
+        }]
+    },
+    options: commonOptions
+});
+</script>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' http://localhost:5000;">
+    <title>WebScrapIn: Login</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <script src="tailwind.js"></script>
+    <script src="login.js"></script>
+</head>
+
+<body class="bg-gradient-to-b from-gray-800 via-gray-700 to-gray-800 text-gray-100 flex items-center justify-center h-screen text-sm text-gray-700">
+    <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm border border-gray-200">
+        <!-- Header Section -->
+        <div class="flex items-center justify-center mb-4">
+            <img src="favicon.ico" alt="App Logo" class="w-10 h-10 mr-2">
+            <h1 class="text-2xl font-extrabold text-indigo-600">WebScrapIn</h1>
+        </div>
+
+        <h2 class="text-xl font-bold text-center text-gray-800 mb-6">Login</h2>
+
+        <!-- Error Message -->
+        <div id="error-message" class="hidden bg-red-100 text-red-700 p-3 mb-4 rounded-lg text-center shadow-sm">
+            Invalid email or password.
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="space-y-6" enctype="multipart/form-data">
+            <!-- Email Field -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-800 mb-2">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-400"
+                    placeholder="Enter your email" 
+                    aria-label="Email"
+                >
+            </div>
+
+            <!-- Password Field -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-800 mb-2">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-400"
+                    placeholder="Enter your password" 
+                    aria-label="Password"
+                >
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+                type="submit" 
+                id="submitbtn" 
+                class="w-full bg-indigo-500 text-white font-semibold py-2 rounded-lg hover:bg-indigo-600 transition duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 shadow-md"
+            >
+                Login
+            </button>
+        </form>
+
+        <!-- Sign Up Link -->
+        <div class="text-center mt-6 text-sm">
+            Don't have an account? 
+            <a 
+                href="https://clerk.com/" 
+                class="text-teal-500 font-medium hover:underline hover:text-teal-600 transition duration-300"
+                aria-label="Sign up link"
+            >
+                Sign Up
+            </a>
+        </div>
+    </div>
+</body>
+</html>
