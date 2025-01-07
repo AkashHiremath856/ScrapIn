@@ -167,10 +167,3 @@ Ensure that **WSL** is installed on your system. You can download WSL from [here
 
 ---
 
-# Contact
-
-For any questions, feedback, or issues related to **WebScrapIn**, please feel free to reach out:
-
-- **Email**: [dataengineer.cb@gmail.com](mailto:dataengineer.cb@gmail.com)
-
-We’d love to hear from you and improve **WebScrapIn** based on your suggestions!
